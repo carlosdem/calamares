@@ -19,7 +19,6 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSpinBox>
-#include <QRegularExpressionValidator>
 
 VolumeGroupBaseDialog::VolumeGroupBaseDialog( QString& vgName, QVector< const Partition* > pvList, QWidget* parent )
     : QDialog( parent )
@@ -39,10 +38,9 @@ VolumeGroupBaseDialog::VolumeGroupBaseDialog( QString& vgName, QVector< const Pa
                                         << "RAID" );
     ui->vgType->setCurrentIndex( 0 );
 
-    QRegularExpression re(QStringLiteral(R"(^(?!_|\.)[\w\-.+]+)"));
-    QRegularExpressionValidator *validator = new QRegularExpressionValidator(re, this);
-    ui->vgName->setValidator(validator);
-    ui->vgName->setText(m_vgNameValue);
+    QRegularExpression re( R"(^(?!_|\.)[\w\-.+]+)" );
+    ui->vgName->setValidator( new QRegularExpressionValidator( re, this ) );
+    ui->vgName->setText( m_vgNameValue );
 
     updateOkButton();
     updateTotalSize();
